@@ -1,70 +1,65 @@
 $(function() {
   var errorsPresent = {
     username: true,
-    password: true
+    passwordLength: true,
+    passwordFormat: true
   };
 
   $('#signIn').on('submit', (e) => {
     e.preventDefault();
     let username = $('#username').val();
     let pass = $('#password').val();
-    if (!errorsPresent.username && !errorsPresent.password) {
+    checkUsername(username);
+    checkPassword(pass);
+    if (!errorsPresent.username && !errorsPresent.passwordLength && !errorsPresent.passwordFormat) {
       let payload = {
         username: username,
         password: pass
       };
+      main.openMainMenu();
     }
   });
 
   $('#username').on("change keyup paste", () => {
     let username = $('#username').val();
-    let checkedInput = checkUsername(username);
-    $('div').remove('#error');
+    $('div').remove('#usernameError');
     $('#username').removeClass('hasError');
     $('#usernameLabel').removeClass('hasError');
-    if (checkedInput) {
-      $('#username').addClass('hasError');
-      $('#usernameLabel').addClass('hasError');
-      $('#signInContainer').prepend('<div id="error" class="hasError"></div>');
-      $('#error').append('<div>Username must be at least 8 characters long.</div>');
-    } else {
-      errorsPresent.username = false;
-    }
+    checkUsername(username);
   });
 
   $('#password').on("change keyup paste", () => {
     let password = $('#password').val();
-    let checkedInput = checkPassword(password);
-    console.log(checkedInput.length);
-    $('div').remove('#error');
+    $('div').remove('#passwordLength');
+    $('div').remove('#passwordFormat');
     $('#password').removeClass('hasError');
     $('#passwordLabel').removeClass('hasError');
-    if (checkedInput.length) {
-      checkedInput.forEach((error) => {
-        if (error === 'password') {
-          $('#password').addClass('hasError');
-          $('#passwordLabel').addClass('hasError');
-          $('#signInContainer').prepend('<div id="error" class="hasError"></div>');
-          $('#error').append('<div>Username must be at least 8 characters long.</div>');
-        }
-        if (error === 'mismatch') {
-          $('#password').addClass('hasError');
-          $('#passwordLabel').addClass('hasError');
-          $('#signInContainer').prepend('<div id="error" class="hasError"></div>');
-          $('#error').append('<div>Password must contain at least:<ul><li>1 Uppercase Letter</li><li>1 Lowercase Letter</li><li>1 Number</li></ul></div>');
-        }
-      });
-    } else {
-      errorsPresent.password = false;
-    }
+    checkPassword(password);
   });
 
-  function checkUsername(username) {return username.length < 8 ? true : false;}
+  function checkUsername(username) {
+    if (username.length < 8) {
+      $('#username').addClass('hasError');
+      $('#usernameLabel').addClass('hasError');
+      $('#signInContainer').prepend('<div id="usernameError" class="hasError"></div>');
+      $('#usernameError').append('<div>Username must be at least 8 characters long.</div>');
+    } else errorsPresent.username = false;
+  }
 
   function checkPassword(password) {
-    let result = [];
-    if (password.length < 8) result.unshift('password');
-    if (!password.match("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])")) result.unshift('mismatch');
-    return result;
+    if (password.length < 8 || !password.match("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])")) {
+      $('#password').addClass('hasError');
+      $('#passwordLabel').addClass('hasError');
+
+      if (password.length < 8) {
+        $('#signInContainer').prepend('<div id="passwordLength" class="hasError"></div>');
+        $('#passwordLength').append('<div>Password must be at least 8 characters long.</div>');
+      } else errorsPresent.passwordLength = false;
+      
+      if (!password.match("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])")) {
+        $('#signInContainer').prepend('<div id="passwordFormat" class="hasError"></div>');
+        $('#passwordFormat').append('<div><hx>Password must contain at least:</hx><ul><li>1 Uppercase Letter</li><li>1 Lowercase Letter</li><li>1 Number</li></ul></div>');
+      } else errorsPresent.passwordFormat = false;
+    }
   }
 });

@@ -3,9 +3,17 @@ const {app, BrowserWindow} = electron;
 
 app.on('ready', () => {
   const {screen} = require('electron');
-  const {size} = screen.getPrimaryDisplay();
-  size.frame = false;
-  let mainWindow = new BrowserWindow(size);
+  const details = screen.getPrimaryDisplay().size;
+  details.frame = false;
+  let mainWindow = new BrowserWindow(details);
   mainWindow.loadURL(`file://${__dirname}/pages/index.html`);
   mainWindow.webContents.openDevTools();
 });
+
+exports.openMainMenu = () => {
+  const {screen} = require('electron');
+  const details = screen.getPrimaryDisplay().size;
+  details.frame = false;
+  let win = new BrowserWindow(details);
+  win.loadURL(`file://${__dirname}/pages/mainMenu.html`);
+};
