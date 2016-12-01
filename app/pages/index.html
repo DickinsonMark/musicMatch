@@ -3,18 +3,20 @@
   <head>
     <meta charset="utf-8">
     <title>Music Match</title>
+    <link rel="stylesheet" href="../css/index.css" media="screen">
   </head>
   <body>
     <h1>Music Match</h1>
+    <div id="signInContainer">
+      <form id="signIn">
+        <label id="usernameLabel" for="username">Username</label>
+        <input type="text" name="username" id="username">
+        <label id="passwordLabel" for="password">Password</label>
+        <input type="password" name="password" id="password">
+        <button type="submit" id="submit">Submit</button>
+      </form>
+    </div>
 
-    <form id="signIn">
-      <label for="username">Username</label>
-      <input type="text" name="username" id="username">
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password">
-      <button type="submit" id="submit">Submit</button>
-    </form>
-    
     <script>window.$ = window.jQuery = require('../js/jquery-3.1.1.min.js');</script>
     <script src="../js/index.js" charset="utf-8"></script>
   </body>
