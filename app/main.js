@@ -11,6 +11,7 @@ app.on('ready', () => {
 });
 
 exports.openMainMenu = () => {
+  console.log('hit');
   const {screen} = require('electron');
   const details = screen.getPrimaryDisplay().size;
   details.frame = false;
