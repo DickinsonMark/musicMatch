@@ -1,7 +1,6 @@
 $(function() {
   const {remote} = require('electron');
-  const main = remote.require('../main.js');
-  
+
   var errorsPresent = {
     username: true,
     passwordLength: true,
@@ -21,15 +20,20 @@ $(function() {
     $('#usernameLabel').removeClass('hasError');
     checkUsername(username);
     checkPassword(pass);
-    console.log(errorsPresent);
-    console.log(!errorsPresent.username && !errorsPresent.passwordLength && !errorsPresent.passwordFormat);
     if (!errorsPresent.username && !errorsPresent.passwordLength && !errorsPresent.passwordFormat) {
       let payload = {
         username: username,
         password: pass
       };
       console.log(payload);
-      main.openMainMenu();
+      $.ajax({
+        method: 'POST',
+        url: 'http://localhost:3000/users/login',
+        data: payload
+      }).then((result) => {
+        console.log(result);
+        window.location.href = "../pages/mainMenu.html";
+      });
     }
   });
 
