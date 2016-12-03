@@ -1,6 +1,13 @@
 const music = require('../resources/music.json');
+const storage = require('electron-json-storage');
 
 $(function() {
+  var user;
+  storage.get('user', (err, data) => {
+    if (err) console.log(err);
+    user = data;
+    $('main').prepend(`<div id="userInfo">${user.username} level ${user.level}</div>`);
+  });
   var roundNum = 0;
   var playerScore = 0;
   var chosenGenre;
@@ -28,7 +35,7 @@ $(function() {
       songs.forEach((song) => {
         roundInfo.songs.push(song.trackName);
       });
-      showRound(roundInfo);
+      showRound(roundInfo, genre);
     });
   }
 
@@ -36,7 +43,6 @@ $(function() {
     var songs = [];
     var ids = [];
     for (let i = 0; i < 4; i++) {
-      console.log('hit');
       var id = music[chosenGenre][Math.floor(Math.random() * music[chosenGenre].length)];
       if (ids.indexOf(id) === -1) {
         ids.push(id);
@@ -55,17 +61,36 @@ $(function() {
     return ajaxPromises;
   }
 
-  function showRound(roundInfo) {
+  function showRound(roundInfo, genre) {
     $('#content').append(`<audio class="sound" src="${roundInfo.answer.previewUrl}" autoplay></audio><div id="round"><h1>Round ${roundNum}</h1></div>`);
     roundInfo.songs.forEach((song, i) => {
-      console.log(song);
       $('#round').append(`<div id="song${i}">${song}</div>`);
       $(`#song${i}`).on('click', function (e) {
         if ($(this).text() === roundInfo.answer.trackName){
           playerScore += 1000;
-        } 
+          console.log('correct', playerScore);
+        } else {
+          console.log('wrong', playerScore);
+        }
+        $('#content').empty();
+        if (roundNum < 4) {
+          getRound(genre);
+        } else {
+          gameComplete();
+        }
       });
     });
   }
 
+  function gameComplete() {
+    console.log('congrats you scored', playerScore);
+    const payload = {username: user.username, expGain: playerScore};
+    $.ajax({
+      method: 'POST',
+      url: 'http://localhost:3000/game/gameOver',
+      data: payload
+    }).then((data) => {
+      console.log(data);
+    });
+  }
 });
