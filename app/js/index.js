@@ -25,19 +25,25 @@ $(function() {
         username: username,
         password: pass
       };
-      console.log(payload);
       $.ajax({
         method: 'POST',
         url: 'http://localhost:3000/users/login',
         data: payload
-      }).then((result) => {
-        console.log(result);
-        window.location.href = "../pages/mainMenu.html";
+      }).then((data) => {
+        if (data.message === 'No user found') {
+          $('#signInContainer').prepend('<div id="usernameError" class="hasError"></div>');
+          $('#usernameError').append(`<div>${data.message}</div>`);
+        } else if (data.message.length > 1){
+          $('#signInContainer').prepend('<div id="usernameError" class="hasError"></div>');
+          $('#usernameError').append('<div>Something went wrong!</div>');
+        } else {
+          window.location.href = './game.html';
+        }
       });
     }
   });
 
-  $('#username').on("change keyup paste", () => {
+  $('#username').on('change keyup paste', () => {
     let username = $('#username').val();
     $('div').remove('#usernameError');
     $('#username').removeClass('hasError');
@@ -45,7 +51,7 @@ $(function() {
     checkUsername(username);
   });
 
-  $('#password').on("change keyup paste", () => {
+  $('#password').on('change keyup paste', () => {
     let password = $('#password').val();
     $('div').remove('#passwordLength');
     $('div').remove('#passwordFormat');
@@ -70,7 +76,7 @@ $(function() {
       $('#signInContainer').prepend('<div id="passwordLength" class="hasError"></div>');
       $('#passwordLength').append('<div>Password must be at least 8 characters long.</div>');
     } else errorsPresent.passwordLength = false;
-    if (!password.match("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])")) {
+    if (!password.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])')) {
       $('#password').addClass('hasError');
       $('#passwordLabel').addClass('hasError');
       $('#signInContainer').prepend('<div id="passwordFormat" class="hasError"></div>');
