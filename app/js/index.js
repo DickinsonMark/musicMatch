@@ -47,7 +47,7 @@ $(function() {
           $('#userAuth').prepend('<div id="usernameError" class="hasError"></div>');
           $('#usernameError').append('<div>Something went wrong!</div>');
         } else {
-          storage.set('user', {username: data.message[0].username, experience: data.message[0].experience}, (err) => {
+          storage.set('user', {username: data.message[0].username, experience: data.message[0].experience, level: data.message[0].level}, (err) => {
             if (err) console.log(err);
           });
           window.location.href = './game.html';
@@ -87,7 +87,7 @@ $(function() {
           $('#signInContainer').prepend('<div id="usernameError" class="hasError"></div>');
           $('#usernameError').append('<div>Something went wrong!</div>');
         } else {
-          storage.set('user', {username: data.message[0].username, experience: data.message[0].experience}, (err) => {
+          storage.set('user', {username: data.message[0].username, experience: data.message[0].experience, level: data.message[0].level}, (err) => {
             if (err) console.log(err);
           });
           window.location.href = './game.html';

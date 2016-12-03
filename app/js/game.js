@@ -90,7 +90,10 @@ $(function() {
       url: 'http://localhost:3000/game/gameOver',
       data: payload
     }).then((data) => {
-      console.log(data);
+      storage.set('user', {username: data.message[0].username, experience: data.message[0].experience, level: data.message[0].level}, (err) => {
+        if (err) console.log(err);
+      });
+      window.location.href = './game.html';
     });
   }
 });
