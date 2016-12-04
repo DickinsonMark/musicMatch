@@ -33,7 +33,7 @@ $(function() {
       const answer = songs[Math.floor(Math.random() * songs.length)];
       const roundInfo = {answer: answer, songs: []};
       songs.forEach((song) => {
-        roundInfo.songs.push(song.trackName);
+        roundInfo.songs.push({track: song.trackName, artist: song.artistName});
       });
       showRound(roundInfo, genre);
     });
@@ -64,9 +64,9 @@ $(function() {
   function showRound(roundInfo, genre) {
     $('#content').append(`<audio class="sound" src="${roundInfo.answer.previewUrl}" autoplay></audio><div id="round"><h1>Round ${roundNum}</h1></div>`);
     roundInfo.songs.forEach((song, i) => {
-      $('#round').append(`<div id="song${i}">${song}</div>`);
-      $(`#song${i}`).on('click', function (e) {
-        if ($(this).text() === roundInfo.answer.trackName){
+      $('#round').append(`<div><span id="song${i}">${song.track}</span> by ${song.artist}</div>`);
+      $(`#song${i}`).parent('div').on('click', function (e) {
+        if ($(`#song${i}`).text() === roundInfo.answer.trackName){
           playerScore += 1000;
           console.log('correct', playerScore);
         } else {
