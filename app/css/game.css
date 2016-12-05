@@ -1,3 +1,11 @@
+.correct {
+  color: green;
+}
+
+.incorrect {
+  color: red;
+}
+
 .item {
     position: relative;
     float: left;

@@ -33,7 +33,7 @@ $(function() {
       const answer = songs[Math.floor(Math.random() * songs.length)];
       const roundInfo = {answer: answer, songs: []};
       songs.forEach((song) => {
-        roundInfo.songs.push({track: song.trackName, artist: song.artistName});
+        roundInfo.songs.push({track: song.trackName, artist: song.artistName, artwork: song.artworkUrl60});
       });
       $('#content').append('<div class="item html"><h2>0</h2><svg width="160" height="160" xmlns="http://www.w3.org/2000/svg"><g><title>Layer 1</title><circle id="circle" class="circle_animation" r="69.85699" cy="81" cx="81" stroke-width="8" stroke="#6fdb6f" fill="none"/></g></svg></div>');
       var time = 3; /* how long the timer runs for */
@@ -91,20 +91,28 @@ var interval;
         timer-= 15;
     }, 10);
     roundInfo.songs.forEach((song, i) => {
-      $('#round').append(`<div><span id="song${i}">${song.track}</span> by ${song.artist}</div>`);
-      $(`#song${i}`).parent('div').on('click', function (e) {
+      $('#round').append(`<div><image src="${song.artwork}"><span class="songs" id="song${i}">${song.track}</span> by ${song.artist}</div>`);
+      $(`#song${i}:not(.disabled)`).parent('div').on('click', function (e) {
+        var songElements = $('.songs');
+        songElements.each((i, song) => {
+          $(song).addClass('disabled');
+          if ($(song).text() === roundInfo.answer.trackName) $(song).addClass('correct');
+        });
         if ($(`#song${i}`).text() === roundInfo.answer.trackName){
           playerScore += playerScore < 0 ? 0 : (Math.ceil(timer / 10));
           console.log('correct', playerScore, timer);
         } else {
+          $(`#song${i}`).addClass('incorrect');
           console.log('wrong', playerScore);
         }
-        $('#content').empty();
-        if (roundNum < 4) {
-          getRound(genre);
-        } else {
-          gameComplete();
-        }
+        setTimeout(function () {
+          $('#content').empty();
+          if (roundNum < 4) {
+            getRound(genre);
+          } else {
+            gameComplete();
+          }
+        }, 3000);
       });
     });
   }
@@ -118,6 +126,7 @@ var interval;
       url: `${url}/game/gameOver`,
       data: payload
     }).then((data) => {
+      console.log(data);
       storage.set('user', {username: data.message[0].username, experience: data.message[0].experience, level: data.message[0].level}, (err) => {
         if (err) console.log(err);
       });
