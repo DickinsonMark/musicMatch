@@ -18,7 +18,6 @@ $(function() {
 
   $('#userAuth').on('submit', '#signUpForm', (e) => {
     e.preventDefault();
-    console.log('hit');
     let username = $('#username').val();
     let pass = $('#password').val();
     $('div').remove('#passwordLength');
@@ -35,9 +34,11 @@ $(function() {
         username: username,
         password: pass
       };
+      // var url = 'http://localhost:3000';
+      var url = 'https://music-match-server.herokuapp.com';
       $.ajax({
         method: 'POST',
-        url: 'http://localhost:3000/users/signUp',
+        url: `${url}/users/signUp`,
         data: payload
       }).then((data) => {
         if (data.message.code === '23505') {
@@ -74,12 +75,13 @@ $(function() {
         username: username,
         password: pass
       };
+      // var url = 'http://localhost:3000';
+      var url = 'https://music-match-server.herokuapp.com';
       $.ajax({
         method: 'POST',
-        url: 'http://localhost:3000/users/signIn',
+        url: `${url}/users/signIn`,
         data: payload
       }).then((data) => {
-        console.log(data);
         if (data.message === 'No user found') {
           $('#signInContainer').prepend('<div id="usernameError" class="hasError"></div>');
           $('#usernameError').append(`<div>${data.message}</div>`);

@@ -35,7 +35,22 @@ $(function() {
       songs.forEach((song) => {
         roundInfo.songs.push({track: song.trackName, artist: song.artistName});
       });
-      showRound(roundInfo, genre);
+      $('#content').append('<div class="item html"><h2>0</h2><svg width="160" height="160" xmlns="http://www.w3.org/2000/svg"><g><title>Layer 1</title><circle id="circle" class="circle_animation" r="69.85699" cy="81" cx="81" stroke-width="8" stroke="#6fdb6f" fill="none"/></g></svg></div>');
+      var time = 3; /* how long the timer runs for */
+      var initialOffset = '440';
+      var i = 1
+      var interval = setInterval(function() {
+          $('.circle_animation').css('stroke-dashoffset', initialOffset-(i*(initialOffset/time)));
+          $('h2').text(i);
+          if (i === time) {
+              clearInterval(interval);
+          }
+          i++;
+      }, 1000);
+      var timeout = setTimeout(function () {
+        $('#content').html('');
+        showRound(roundInfo, genre);
+      }, 4000);
     });
   }
 
@@ -60,15 +75,27 @@ $(function() {
     });
     return ajaxPromises;
   }
+var interval;
 
   function showRound(roundInfo, genre) {
     $('#content').append(`<audio class="sound" src="${roundInfo.answer.previewUrl}" autoplay></audio><div id="round"><h1>Round ${roundNum}</h1></div>`);
+    $('#content').append('<progress id="progress" max="15000" value="15000"></progress>');
+    let timer = 15000;
+    clearInterval(interval);
+    interval = setInterval(function() {
+      let value = $('#progress').val() - 15;
+        $('#progress').val(value);
+        if (timer <= 1) {
+            clearInterval(interval);
+        }
+        timer-= 15;
+    }, 10);
     roundInfo.songs.forEach((song, i) => {
       $('#round').append(`<div><span id="song${i}">${song.track}</span> by ${song.artist}</div>`);
       $(`#song${i}`).parent('div').on('click', function (e) {
         if ($(`#song${i}`).text() === roundInfo.answer.trackName){
-          playerScore += 1000;
-          console.log('correct', playerScore);
+          playerScore += playerScore < 0 ? 0 : (Math.ceil(timer / 10));
+          console.log('correct', playerScore, timer);
         } else {
           console.log('wrong', playerScore);
         }
@@ -85,9 +112,10 @@ $(function() {
   function gameComplete() {
     console.log('congrats you scored', playerScore);
     const payload = {username: user.username, expGain: playerScore};
+    var url = 'https://music-match-server.herokuapp.com';
     $.ajax({
       method: 'POST',
-      url: 'http://localhost:3000/game/gameOver',
+      url: `${url}/game/gameOver`,
       data: payload
     }).then((data) => {
       storage.set('user', {username: data.message[0].username, experience: data.message[0].experience, level: data.message[0].level}, (err) => {
