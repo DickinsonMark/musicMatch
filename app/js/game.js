@@ -92,28 +92,31 @@ var interval;
     }, 10);
     roundInfo.songs.forEach((song, i) => {
       $('#round').append(`<div><image src="${song.artwork}"><span class="songs" id="song${i}">${song.track}</span> by ${song.artist}</div>`);
-      $(`#song${i}:not(.disabled)`).parent('div').on('click', function (e) {
-        var songElements = $('.songs');
-        songElements.each((i, song) => {
-          $(song).addClass('disabled');
-          if ($(song).text() === roundInfo.answer.trackName) $(song).addClass('correct');
-        });
-        if ($(`#song${i}`).text() === roundInfo.answer.trackName){
-          playerScore += playerScore < 0 ? 0 : (Math.ceil(timer / 10));
-          console.log('correct', playerScore, timer);
-        } else {
-          $(`#song${i}`).addClass('incorrect');
-          console.log('wrong', playerScore);
+    });
+
+    $('#round').one('click', 'div', function (e) {
+      $('.songs').each((i, song) => {
+        if ($(song).text() === roundInfo.answer.trackName) {
+          $(song).parent().addClass('correct');
         }
-        setTimeout(function () {
-          $('#content').empty();
-          if (roundNum < 4) {
-            getRound(genre);
-          } else {
-            gameComplete();
-          }
-        }, 3000);
       });
+
+      if ($(e.currentTarget.outerHTML).children('.songs').text() === roundInfo.answer.trackName){
+        let scoredPoints = playerScore < 0 ? 0 : (Math.ceil(timer / 10));
+        playerScore += scoredPoints
+        console.log('correct', playerScore, timer);
+      } else {
+        $(e.currentTarget).first().addClass('incorrect');
+        console.log('wrong', playerScore);
+      }
+      setTimeout(function () {
+        $('#content').empty();
+        if (roundNum < 4) {
+          getRound(genre);
+        } else {
+          gameComplete();
+        }
+      }, 3000);
     });
   }
 

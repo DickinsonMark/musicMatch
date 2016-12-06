@@ -7,5 +7,5 @@ app.on('ready', () => {
   details.frame = false;
   let mainWindow = new BrowserWindow(details);
   mainWindow.loadURL(`file://${__dirname}/pages/index.html`);
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 });
