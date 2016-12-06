@@ -1,7 +1,69 @@
 .hasError {
-  color: red;
+  color: #ff0000;
 }
 
 ul {
   margin-top: 0px;
+}
+
+main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userAuth {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 10px;
+  background-color: #FED766;
+  width: 40vw;
+  height: 40vh;
+}
+
+.signIn {
+  width: 80%;
+  height: 30%;
+  background-color: #06BEE1;
+  border: none;
+}
+
+.signUp {
+  width: 80%;
+  height: 30%;
+  background-color: #008000;
+  border: none;
+}
+
+.tooltip{
+  margin: auto;
+  padding: 8px;
+  border:1px solid red;
+  background-color:yellow;
+  position: absolute;
+  z-index: 2;
+}
+
+.signUpContainer, .signInContainer {
+  width: 100%;
+  height: 100%;
+}
+
+form {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+form button{
+  border: none;
+  padding: 10px;
+  margin: 10px;
+  background-color: #008000;
 }

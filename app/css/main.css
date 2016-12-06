@@ -1,0 +1,16 @@
+html {
+  height: 100vh;
+  width: 100vw;
+  background: radial-gradient(#06BEE1 15%, #000080 60%);
+}
+
+body {
+  width: 100%;
+  height: 100%;
+}
+
+header {
+  width: 100%;
+  background-color: #A30000;
+  position: absolute;
+}

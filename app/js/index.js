@@ -4,16 +4,15 @@ $(function() {
 
   var errorsPresent = {
     username: true,
-    passwordLength: true,
-    passwordFormat: true
+    password: true
   };
 
   $('#signIn').on('click', (e) => {
-    $('#userAuth').html('<div id="signInContainer"><form id="signInForm"><label id="usernameLabel" for="username">Username</label><input type="text" name="username" id="username"><label id="passwordLabel" for="password">Password</label><input type="password" name="password" id="password"><button type="submit" id="submit">Submit</button></form></div>');
+    $('#userAuth').html('<div class="signInContainer" id="signInContainer"><form id="signInForm"><label id="usernameLabel" for="username">Username</label><input type="text" name="username" id="username"><label id="passwordLabel" for="password">Password</label><input type="password" name="password" id="password"><button type="submit" id="submit">Submit</button></form></div>');
   });
 
   $('#signUp').on('click', (e) => {
-    $('#userAuth').html('<div id="signUpContainer"><form id="signUpForm"><label id="usernameLabel" for="username">Username</label><input type="text" name="username" id="username"><label id="passwordLabel" for="password">Password</label><input type="password" name="password" id="password"><button type="submit" id="submit">Submit</button></form></div>');
+    $('#userAuth').html('<div class="signUpContainer" id="signUpContainer"><form id="signUpForm"><label id="usernameLabel" for="username">Username</label><input type="text" name="username" id="username"><label id="passwordLabel" for="password">Password</label><input type="password" name="password" id="password"><button type="submit" id="submit">Submit</button></form></div>');
   });
 
   $('#userAuth').on('submit', '#signUpForm', (e) => {
@@ -29,7 +28,7 @@ $(function() {
     $('#usernameLabel').removeClass('hasError');
     checkUsername(username);
     checkPassword(pass);
-    if (!errorsPresent.username && !errorsPresent.passwordLength && !errorsPresent.passwordFormat) {
+    if (!errorsPresent.username && !errorsPresent.password) {
       let payload = {
         username: username,
         password: pass
@@ -70,7 +69,7 @@ $(function() {
     $('#usernameLabel').removeClass('hasError');
     checkUsername(username);
     checkPassword(pass);
-    if (!errorsPresent.username && !errorsPresent.passwordLength && !errorsPresent.passwordFormat) {
+    if (!errorsPresent.username && !errorsPresent.password) {
       let payload = {
         username: username,
         password: pass
@@ -98,44 +97,52 @@ $(function() {
     }
   });
 
-  $('#userAuth').on('change keyup paste', '#username', () => {
+  $('#userAuth').on('blur', '#username', (event) => {
     let username = $('#username').val();
     $('div').remove('#usernameError');
     $('#username').removeClass('hasError');
     $('#usernameLabel').removeClass('hasError');
-    checkUsername(username);
+    checkUsername(username, event);
   });
 
-  $('#userAuth').on('change keyup paste', '#password', () => {
+  $('#userAuth').on('blur', '#password', (event) => {
     let password = $('#password').val();
     $('div').remove('#passwordLength');
     $('div').remove('#passwordFormat');
     $('#password').removeClass('hasError');
     $('#passwordLabel').removeClass('hasError');
-    checkPassword(password);
+    checkPassword(password, event);
   });
 
-  function checkUsername(username) {
+  function checkUsername(username, e) {
+    var message;
     if (username.length < 8) {
       $('#username').addClass('hasError');
       $('#usernameLabel').addClass('hasError');
-      $('#userAuth').prepend('<div id="usernameError" class="hasError"></div>');
-      $('#usernameError').append('<div>Username must be at least 8 characters long.</div>');
+      showTooltip('username');
     } else errorsPresent.username = false;
   }
 
   function checkPassword(password) {
-    if (password.length < 8) {
+    var message;
+    if (!password.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])') || password.length < 8) {
       $('#password').addClass('hasError');
       $('#passwordLabel').addClass('hasError');
-      $('#userAuth').prepend('<div id="passwordLength" class="hasError"></div>');
-      $('#passwordLength').append('<div>Password must be at least 8 characters long.</div>');
-    } else errorsPresent.passwordLength = false;
-    if (!password.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])')) {
-      $('#password').addClass('hasError');
-      $('#passwordLabel').addClass('hasError');
-      $('#userAuth').prepend('<div id="passwordFormat" class="hasError"></div>');
-      $('#passwordFormat').append('<div><hx>Password must contain at least:</hx><ul><li>1 Uppercase Letter</li><li>1 Lowercase Letter</li><li>1 Number</li></ul></div>');
-    } else errorsPresent.passwordFormat = false;
+      showTooltip('password');
+    } else errorsPresent.password = false;
   }
+
+  var showTooltip = function(userOrPass) {
+    $('div.tooltip').remove();
+    var offsetTop, offsetLeft;
+    console.log(event.target.offsetLeft);
+    if (userOrPass === 'password') {
+      $('<div id="passwordError" class="hasError tooltip"><div><hx>Password must contain at least:</hx><ul><li>1 Uppercase Letter</li><li>1 Lowercase Letter</li><li>1 Number</li><li>8 characters total</li></ul></div></div>').appendTo('#userAuth');
+      offsetTop = event.target.offsetTop - 225;
+    } else {
+      $('<div id="usernameError" class="hasError tooltip"><div>Username must be at least 8 characters long.</div></div>').appendTo('#userAuth');
+      offsetTop = event.target.offsetTop - 150;
+    }
+    $('div.tooltip').css({top: offsetTop});
+  };
 });
