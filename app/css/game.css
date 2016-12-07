@@ -14,6 +14,31 @@ body {
   background-color: rgba(255, 0, 0, 0.75);
 }
 
+.choice {
+  height: 60px;
+  width: 100%;
+  vertical-align: middle;
+  line-height: 60px;
+  background-color: rgba(3,23,65,.50);
+  color: white;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.choice * {
+  padding-bottom: 0;
+}
+
+.choice img {
+  margin-right: 1rem;
+}
+
+.choice p {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+}
+
 .content {
   background-color: rgba(0, 119, 188, 0.85);
   border-radius: 10px;

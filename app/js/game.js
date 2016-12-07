@@ -4,6 +4,7 @@ const storage = require('electron-json-storage');
 $(function() {
   var user, chosenGenre;
   var roundAnswers = [];
+  var alreadyChosen = [];
   storage.get('user', (err, data) => {
     if (err) console.log(err);
     user = data;
@@ -31,8 +32,10 @@ $(function() {
         return song.results[0];
       });
       const answer = songs[Math.floor(Math.random() * songs.length)];
+      alreadyChosen.push(answer.trackId)
       const roundInfo = {answer: answer, songs: []};
       songs.forEach((song) => {
+        song.trackName = song.trackName.replace(/ \((.*)/g, '');
         roundInfo.songs.push({track: song.trackName, artist: song.artistName, artwork: song.artworkUrl60});
       });
       $('#content').append('<div class="pie degree"><span class="block"></span><span id="time">0</span></div>');
@@ -66,7 +69,7 @@ $(function() {
     var ids = [];
     for (let i = 0; i < 4; i++) {
       var id = music[chosenGenre][Math.floor(Math.random() * music[chosenGenre].length)];
-      if (ids.indexOf(id) === -1) {
+      if (ids.indexOf(id) === -1 && alreadyChosen.indexOf(id) === -1) {
         ids.push(id);
       } else {
         i--;
@@ -98,21 +101,24 @@ var interval;
         timer -= 15;
     }, 10);
     roundInfo.songs.forEach((song, i) => {
-      $('#round').append(`<div data-index="${i}"><image src="${song.artwork}"><span class="songs" id="song${i}">${song.track}</span> by ${song.artist}</div>`);
+      $('#round').append(`<div class="choice" data-index="${i}"><image src="${song.artwork}"><p><span class="songs" id="song${i}">${song.track}</span> by ${song.artist}</p></div>`);
     });
 
     $('#round').one('click', 'div', function (e) {
       $('.songs').each((i, song) => {
         if ($(song).text() === roundInfo.answer.trackName) {
-          $(song).parent().addClass('correct');
+          $(song).parent().parent().css('background-color', 'rgba(17, 221, 19, 0.75)');
         }
       });
       roundAnswers.push({correct: roundInfo.answer, answer: roundInfo.songs[$(this).data('index')]});
-      if ($(e.currentTarget.outerHTML).children('.songs').text() === roundInfo.answer.trackName){
+      console.log($(e.currentTarget.outerHTML).children('p').children('.songs').text());
+      console.log($(e.currentTarget.outerHTML).children('p').children('.songs').text(), '===', roundInfo.answer.trackName);
+      console.log($(e.currentTarget.outerHTML).children('p').children('.songs').text() === roundInfo.answer.trackName);
+      if ($(e.currentTarget.outerHTML).children('p').children('.songs').text() === roundInfo.answer.trackName){
         let scoredPoints = timer < 0 ? 0 : (Math.ceil(timer / 10));
         playerScore += scoredPoints
       } else {
-        $(e.currentTarget).first().addClass('incorrect');
+        $(e.currentTarget).first().css('background-color', 'rgba(255, 0, 0, 0.75)');
       }
       setTimeout(function () {
         $('#content').empty();
