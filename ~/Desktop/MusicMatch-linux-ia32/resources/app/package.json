@@ -1,0 +1,27 @@
+{
+  "name": "music_match",
+  "version": "1.0.0",
+  "description": "guess that song",
+  "main": "app/main.js",
+  "scripts": {
+    "start": "electron app/main.js",
+    "package": "electron-packager ./ MusicMatch --all --version=1.0.0 --out=~/Desktop --overwrite --icon=./app/resources/musicMatch.ic0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DickinsonMark/musicMatch.git"
+  },
+  "author": "Mark Dickinson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DickinsonMark/musicMatch/issues"
+  },
+  "homepage": "https://github.com/DickinsonMark/musicMatch#readme",
+  "devDependencies": {
+    "electron": "^1.4.10",
+    "electron-packager": "^8.3.0"
+  },
+  "dependencies": {
+    "electron-json-storage": "^2.1.0"
+  }
+}
