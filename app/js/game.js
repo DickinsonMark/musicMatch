@@ -111,9 +111,6 @@ var interval;
         }
       });
       roundAnswers.push({correct: roundInfo.answer, answer: roundInfo.songs[$(this).data('index')]});
-      console.log($(e.currentTarget.outerHTML).children('p').children('.songs').text());
-      console.log($(e.currentTarget.outerHTML).children('p').children('.songs').text(), '===', roundInfo.answer.trackName);
-      console.log($(e.currentTarget.outerHTML).children('p').children('.songs').text() === roundInfo.answer.trackName);
       if ($(e.currentTarget.outerHTML).children('p').children('.songs').text() === roundInfo.answer.trackName){
         let scoredPoints = timer < 0 ? 0 : (Math.ceil(timer / 10));
         playerScore += scoredPoints
