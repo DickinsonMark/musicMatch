@@ -47,6 +47,8 @@ $(function() {
           $('#userAuth').prepend('<div id="usernameError" class="hasError"></div>');
           $('#usernameError').append('<div>Something went wrong!</div>');
         } else {
+          $('#userAuth').empty();
+          $('#userAuth').append('<div class="loading"><div class="bullet"></div><div class="bullet"></div><div class="bullet"></div><div class="bullet"></div></div>');
           storage.set('user', {username: data.message[0].username, experience: data.message[0].experience, level: data.message[0].level}, (err) => {
             if (err) console.log(err);
           });
@@ -88,6 +90,8 @@ $(function() {
           $('#signInContainer').prepend('<div id="usernameError" class="hasError"></div>');
           $('#usernameError').append('<div>Something went wrong!</div>');
         } else {
+          $('#userAuth').empty();
+          $('#userAuth').append('<div class="loading"><div class="bullet"></div><div class="bullet"></div><div class="bullet"></div><div class="bullet"></div></div>');
           storage.set('user', {username: data.message[0].username, experience: data.message[0].experience, level: data.message[0].level}, (err) => {
             if (err) console.log(err);
           });
@@ -135,7 +139,6 @@ $(function() {
   var showTooltip = function(userOrPass) {
     $('div.tooltip').remove();
     var offsetTop, offsetLeft;
-    console.log(event.target.offsetLeft);
     if (userOrPass === 'password') {
       $('<div id="passwordError" class="hasError tooltip"><div><hx>Password must contain at least:</hx><ul><li>1 Uppercase Letter</li><li>1 Lowercase Letter</li><li>1 Number</li><li>8 characters total</li></ul></div></div>').appendTo('#userAuth');
       offsetTop = event.target.offsetTop - 225;

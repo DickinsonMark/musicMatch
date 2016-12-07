@@ -1,47 +1,82 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .correct {
-  color: green;
+  background-color: rgba(17, 221, 19, 0.75);
 }
 
 .incorrect {
-  color: red;
+  background-color: rgba(255, 0, 0, 0.75);
 }
 
 .content {
-  height: 100vh;
-  width: 100vw;
+  background-color: rgba(0, 119, 188, 0.85);
+  border-radius: 10px;
+  height: 60%;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.content h1 {
+  color: white;
+  margin-bottom: 5%;
 }
 
-.item {
-  position: relative;
-  float: left;
-}
 
-.item h2 {
-  text-align:center;
-  position: absolute;
-  line-height: 125px;
+main {
   width: 100%;
 }
 
-svg {
-  -webkit-transform: rotate(-90deg);
-  transform: rotate(-90deg);
+.genre {
+  height: 40px;
+  width: 80%;
+  margin-left: 10%;
+  font-size: 25px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background-color: rgb(3,23,65);
+  color: white;
+  text-align: center;
 }
 
-.circle_animation {
-  stroke-dasharray: 440; /* this value is the pixel circumference of the circle */
-  stroke-dashoffset: 440;
-  transition: all 1s linear;
+.pie{
+  width: 250px;
+  height: 250px;
+  display: block;
+  position: relative;
+  border-radius: 50%;
+  background-color: rgb(3,23,65);
+  border: 2px solid rgb(3,23,65);
+  float: left;
+  margin: 2em;
 }
 
-progress[value]::-webkit-progress-value {
+.pie .block{
+  position:absolute;
+  width:230px;
+  height:230px;
+  display:block;
+  border-radius:50%;
+  top:10px;
+  left:10px;
+}
+
+#time{
+  font-size:3em;
+  position:absolute;
+  top:35%;
+  left:43%;
+  color: rgb(0,226,255);
+}
+.degree{
   background-image:
-    -webkit-linear-gradient(-45deg,
-      transparent 33%, rgba(0, 0, 0, .1) 33%, rgba(0,0, 0, .1) 66%, transparent 66%),
-    -webkit-linear-gradient(top,
-      rgba(255, 255, 255, .25), rgba(0, 0, 0, .25)),
-    -webkit-linear-gradient(left, #23af00, #198000);
-
-    border-radius: 2px;
-    background-size: 35px 20px, 100% 100%, 100% 100%;
+    linear-gradient(90deg, transparent 50%, white 50%),
+    linear-gradient(90deg, white 50%, transparent 50%);
 }
