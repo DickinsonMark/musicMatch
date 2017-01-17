@@ -1,6 +1,7 @@
 const electron = require('electron');
 const {app, BrowserWindow} = electron;
 
+// Create the window for the application when the program is ready.
 app.on('ready', () => {
   const {screen} = require('electron');
   const details = screen.getPrimaryDisplay().size;
